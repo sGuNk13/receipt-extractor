@@ -1,5 +1,6 @@
 import base64
 import json
+import re
 from groq import Groq
 
 def extract_receipt_data(image_path, groq_api_key):
@@ -9,33 +10,31 @@ def extract_receipt_data(image_path, groq_api_key):
     with open(image_path, "rb") as img_file:
         image_data = base64.b64encode(img_file.read()).decode('utf-8')
     
-    prompt = """Extract these fields from the receipt image:
+    prompt = """Extract receipt data and return ONLY a JSON object with this exact structure (no markdown, no explanation):
 
-Header:
-- Merchant name
-- Address
-- Tax ID
-- Contact
-
-Date:
-- Transaction date
-
-Line items (list each):
-- Description
-- Amount
-
-Payment:
-- Total
-- VAT (if available, else null)
-- Net total
-
-Signature:
-- Collector signed (Yes/No - check if there's any signature)
-
-Return valid JSON only, no explanation."""
+{
+  "header": {
+    "merchant_name": "",
+    "address": "",
+    "tax_id": "",
+    "contact": ""
+  },
+  "date": "",
+  "line_items": [
+    {"description": "", "amount": ""}
+  ],
+  "payment": {
+    "total": "",
+    "vat": "",
+    "net_total": ""
+  },
+  "signature": {
+    "collector_signed": ""
+  }
+}"""
     
     response = client.chat.completions.create(
-        model="llama-3.2-11b-vision-preview",
+        model="meta-llama/llama-4-maverick-17b-128e-instruct",
         messages=[{
             "role": "user",
             "content": [
@@ -46,4 +45,11 @@ Return valid JSON only, no explanation."""
         temperature=0
     )
     
-    return json.loads(response.choices[0].message.content)
+    content = response.choices[0].message.content
+    
+    # Clean response - remove markdown code blocks if present
+    content = re.sub(r'```json\s*', '', content)
+    content = re.sub(r'```\s*', '', content)
+    content = content.strip()
+    
+    return json.loads(content)
