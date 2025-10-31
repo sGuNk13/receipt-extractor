@@ -19,6 +19,11 @@ def extract_receipt_data(image_path, groq_api_key):
     "tax_id": "",
     "contact": ""
   },
+  "customer": {
+    "name": "",
+    "address": "",
+    "tax_id": ""
+  },
   "date": "",
   "line_items": [
     {"description": "", "amount": ""}
@@ -31,7 +36,13 @@ def extract_receipt_data(image_path, groq_api_key):
   "signature": {
     "collector_signed": ""
   }
-}"""
+}
+
+Rules:
+- header.tax_id = seller/merchant/service provider tax ID (near merchant info)
+- customer.tax_id = buyer/customer tax ID (near customer info)
+- If only one tax ID exists, put it in header.tax_id and leave customer.tax_id empty
+- customer fields can be empty if not present"""
     
     response = client.chat.completions.create(
         model="meta-llama/llama-4-maverick-17b-128e-instruct",
