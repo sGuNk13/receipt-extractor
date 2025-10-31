@@ -58,17 +58,15 @@ def extract_receipt_data(image_path, groq_api_key):
 
 Extraction Rules:
 1. header.contact = ONLY phone number after "Tel" or "โทร", exclude fax
-2. customer.name = The PAYER/COMPANY, NOT the guest name. Look for "Company", "คณะ", "บริษัท", or organization names. If there's both a "Guest's Name" and "Company", use the Company name.
-3. customer.address = Company/payer address (look for "Company Address" field), keep in ORIGINAL language
-4. customer.tax_id = Company/payer tax ID (look near company info or "เลขประจำตัวผู้เสียภาษี")
-5. line_items.description = Combine ALL text for that item (product name + dates/details if any, but NOT the guest name)
-6. payment.total = subtotal before VAT (or "Expenses")
-7. payment.vat = VAT amount (0 if not shown)
-8. payment.net_total = final total after VAT (or "Total Expenses")
-9. signature.collector_signed = "Yes" if you see ANY handwriting, signature, or ink marks in the "Issued by/Collector/ออกโดย/ผู้รับเงิน/GUEST'S SIGNATURE/CASHIER'S SIGNATURE" sections, otherwise "No"
-10. Keep all Thai text in Thai, all English in English - do NOT translate
-11. Double-check Thai month abbreviations and characters (หมู่ not นม, เอกสาร not อกสาร)
-12. date = Transaction date or check-out date or printed date (in format shown on receipt)"""
+2. customer.name = Full business/person name in ORIGINAL language (Thai or English as shown)
+3. customer.address = Keep in ORIGINAL language - be careful with Thai characters (หมู่ not นม, เอกสาร not อกสาร)
+4. line_items.description = Combine ALL text for that item (product name + customer name + dates/details if any)
+5. payment.total = subtotal before VAT
+6. payment.vat = VAT amount (0 if not shown)
+7. payment.net_total = final total after VAT
+8. signature.collector_signed = "Yes" if you see ANY handwriting, signature, or ink marks in the "Issued by/Collector/ออกโดย/ผู้รับเงิน" section at the bottom of receipt, otherwise "No". Look carefully for handwritten signatures.
+9. Keep all Thai text in Thai, all English in English - do NOT translate
+10. Double-check Thai month abbreviations: ม.ค.=January, ก.พ.=February, มี.ค.=March, เม.ย.=April, พ.ค.=May, มิ.ย.=June, ก.ค.=July, ส.ค.=August, ก.ย.=September, ต.ค.=October, พ.ย.=November, ธ.ค.=December"""
     
     response = client.chat.completions.create(
         model="meta-llama/llama-4-maverick-17b-128e-instruct",
