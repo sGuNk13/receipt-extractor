@@ -41,12 +41,12 @@ if groq_api_key:
                         st.json(result)
                         
                         # Download button
-                        st.download_button(
-                            "Download JSON",
-                            data=json.dumps(result, indent=2),
-                            file_name="receipt_data.json",
-                            mime="application/json"
-                        )
+                        #st.download_button(
+                        #    "Download JSON",
+                        #    data=json.dumps(result, indent=2),
+                        #    file_name="receipt_data.json",
+                        #    mime="application/json"
+                        #)
                     except Exception as e:
                         st.error(f"Error: {str(e)}")
                     finally:
