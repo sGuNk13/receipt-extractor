@@ -35,7 +35,7 @@ Signature:
 Return valid JSON only, no explanation."""
     
     response = client.chat.completions.create(
-        model="meta-llama/llama-4-maverick-17b-128e-instruct",
+        model="llama-3.2-11b-vision-preview",
         messages=[{
             "role": "user",
             "content": [
