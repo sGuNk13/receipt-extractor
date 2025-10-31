@@ -33,11 +33,11 @@ def extract_receipt_data(image_path, groq_api_key):
     "tax_id": "",
     "contact": ""
   },
-  "customer": {
-    "name": "",
-    "address": "",
-    "tax_id": ""
-  },
+  #"customer": {
+  #  "name": "",
+  #  "address": "",
+  #  "tax_id": ""
+  #},
   "date": "",
   "line_items": [
     {"description": "", "amount": ""}
