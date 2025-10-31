@@ -58,13 +58,13 @@ def extract_receipt_data(image_path, groq_api_key):
 
 Extraction Rules:
 1. header.contact = ONLY phone number after "Tel" or "โทร", exclude fax
-2. customer.name = Full business/person name in ORIGINAL language (Thai or English as shown)
-3. customer.address = Keep in ORIGINAL language - be careful with Thai characters (หมู่ not นม, เอกสาร not อกสาร)
+2. customer.name = If both "Company" AND "Guest's Name" fields exist, use the Company name (not guest). Otherwise use the customer/buyer name shown.
+3. customer.address = Keep in ORIGINAL language (Thai or English as shown)
 4. line_items.description = Combine ALL text for that item (product name + customer name + dates/details if any)
 5. payment.total = subtotal before VAT
 6. payment.vat = VAT amount (0 if not shown)
 7. payment.net_total = final total after VAT
-8. signature.collector_signed = "Yes" if you see ANY handwriting, signature, or ink marks in the "Issued by/Collector/ออกโดย/ผู้รับเงิน" section at the bottom of receipt, otherwise "No". Look carefully for handwritten signatures.
+8. signature.collector_signed = "Yes" if you see ANY handwriting, signature, or ink marks in the "Issued by/Collector/ออกโดย/ผู้รับเงิน/CASHIER'S SIGNATURE" section, otherwise "No". Look carefully.
 9. Keep all Thai text in Thai, all English in English - do NOT translate
 10. Double-check Thai month abbreviations: ม.ค.=January, ก.พ.=February, มี.ค.=March, เม.ย.=April, พ.ค.=May, มิ.ย.=June, ก.ค.=July, ส.ค.=August, ก.ย.=September, ต.ค.=October, พ.ย.=November, ธ.ค.=December"""
     
