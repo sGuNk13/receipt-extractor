@@ -6,7 +6,7 @@ from extractor import extract_receipt_data
 
 st.set_page_config(page_title="Receipt Extractor", layout="wide")
 
-st.title("Receipt Data Extractor")
+st.title("KKBS AI: Receipt Data Extractor")
 
 # Get API key from secrets or input
 groq_api_key = st.secrets.get("GROQ_API_KEY", "")
