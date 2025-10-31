@@ -38,11 +38,16 @@ def extract_receipt_data(image_path, groq_api_key):
   }
 }
 
-Rules:
-- header.tax_id = seller/merchant/service provider tax ID (near merchant info)
-- customer.tax_id = buyer/customer tax ID (near customer info)
-- If only one tax ID exists, put it in header.tax_id and leave customer.tax_id empty
-- customer fields can be empty if not present"""
+Extraction Rules:
+1. header.contact = ONLY phone number after "Tel" or "โทร", exclude fax
+2. customer.name = Full business/person name in ORIGINAL language (Thai or English as shown)
+3. customer.address = Keep in ORIGINAL language (Thai or English as shown)
+4. line_items.description = Combine ALL text for that item (product name + customer name + dates/details if any)
+5. payment.total = subtotal before VAT
+6. payment.vat = VAT amount
+7. payment.net_total = final total after VAT
+8. signature.collector_signed = "Yes" if any signature/handwriting visible in Issued by/Collector/ออกโดย section, otherwise "No"
+9. Keep all Thai text in Thai, all English in English - do NOT translate"""
     
     response = client.chat.completions.create(
         model="meta-llama/llama-4-maverick-17b-128e-instruct",
